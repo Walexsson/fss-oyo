@@ -36,27 +36,27 @@ function initHeroSlider() {
     // If we are at the last slide and go to first, treat as Next (Forward)
     // If we are at the first slide and go to last, treat as Prev (Backward)
     // Otherwise, numerical comparison.
-    let direction = 'next';
+    let direction = "next";
     if (currentSlide === 0 && index === slides.length - 1) {
-      direction = 'prev';
+      direction = "prev";
     } else if (currentSlide === slides.length - 1 && index === 0) {
-      direction = 'next';
+      direction = "next";
     } else {
-      direction = index > currentSlide ? 'next' : 'prev';
+      direction = index > currentSlide ? "next" : "prev";
     }
 
     const current = slides[currentSlide];
     const next = slides[index];
 
     // Reset classes
-    slides.forEach(s => {
+    slides.forEach((s) => {
       s.classList.remove("active", "exit-left", "exit-right", "from-left");
-      s.style.transition = ""; 
+      s.style.transition = "";
     });
 
-    if (direction === 'next') {
+    if (direction === "next") {
       // Forward: Current -> Exit Left (-100%), Next starts Right (100%) -> Center (0)
-      
+
       // 1. Prepare Next (ensure it's at 100%, which is default state for .slide)
       // If next happened to be 'from-left' or 'exit-left', we must reset it to 100% instantly
       next.style.transition = "none";
@@ -68,7 +68,6 @@ function initHeroSlider() {
       // 2. Animate
       current.classList.add("exit-left");
       next.classList.add("active");
-
     } else {
       // Backward: Current -> Exit Right (100%), Next starts Left (-100%) -> Center (0)
 
@@ -81,14 +80,14 @@ function initHeroSlider() {
       // 2. Animate
       current.classList.add("exit-right"); // Moves to 100%
       setTimeout(() => {
-          next.classList.remove("from-left");
-          next.classList.add("active");
+        next.classList.remove("from-left");
+        next.classList.add("active");
       }, 20); // Small delay to ensure transition engages
     }
 
     // Update state
     currentSlide = index;
-    dots.forEach(d => d.classList.remove("active"));
+    dots.forEach((d) => d.classList.remove("active"));
     dots[currentSlide].classList.add("active");
   };
 
@@ -116,10 +115,12 @@ function initHeroSlider() {
 
 function initAnimations() {
   // Check for reduced motion preference
-  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
   if (prefersReducedMotion) {
     // If reduced motion is preferred, just show everything immediately
-    document.querySelectorAll(".reveal").forEach(el => {
+    document.querySelectorAll(".reveal").forEach((el) => {
       el.classList.add("active");
       el.classList.remove("reveal"); // Remove class to prevent future animations
     });
@@ -129,7 +130,7 @@ function initAnimations() {
   const observerOptions = {
     root: null,
     rootMargin: "0px", // Trigger when element touches viewport edge
-    threshold: 0.15,   // 15% visible
+    threshold: 0.15, // 15% visible
   };
 
   const observer = new IntersectionObserver((entries, observer) => {
@@ -142,27 +143,27 @@ function initAnimations() {
         // Exit (Optional: Uncomment next lines if you want elements to fade out when scrolling away)
         // For a smoother experience, we typically only animate IN, but user asked for "entrance and exit".
         // Let's implement it such that if it goes completely out of view, it resets for next time.
-        
+
         // entry.target.classList.remove("active");
         // entry.target.classList.add("exiting");
-        
-        // Valid Strategy: 
+
+        // Valid Strategy:
         // 1. Play entrance when it comes into view.
         // 2. Play exit when it leaves view (can be annoying if reading).
         // 3. Current implementation: Animate IN. If user scrolls UP and then back DOWN, should it animate again?
         // Let's make it Reversible.
-        
+
         if (entry.boundingClientRect.y > 0) {
-           // Element went below the fold (scrolled up) - maybe keep it visible?
-           // Usually we only exit if we want to re-trigger the entrance.
-           // Let's strictly follow "Entrance AND Exit" request.
-           // This implies when I scroll past it, it might fade out, or when I scroll back it fades out.
-           
-           // Simple Reversible Animation Logic:
-           entry.target.classList.remove("active");
-           // We don't necessarily need an explicit 'exiting' class if removing 'active' reverts to the hidden state defined in CSS (.reveal)
-           // .reveal has opacity: 0; transform: translateY(30px);
-           // So removing .active will animate it back to invisible state.
+          // Element went below the fold (scrolled up) - maybe keep it visible?
+          // Usually we only exit if we want to re-trigger the entrance.
+          // Let's strictly follow "Entrance AND Exit" request.
+          // This implies when I scroll past it, it might fade out, or when I scroll back it fades out.
+
+          // Simple Reversible Animation Logic:
+          entry.target.classList.remove("active");
+          // We don't necessarily need an explicit 'exiting' class if removing 'active' reverts to the hidden state defined in CSS (.reveal)
+          // .reveal has opacity: 0; transform: translateY(30px);
+          // So removing .active will animate it back to invisible state.
         }
       }
     });
@@ -220,31 +221,24 @@ function initMobileNav() {
     closeBtn.addEventListener("click", closeMenu);
   }
 
-  // Close menu when clicking a link
+  // Close menu when clicking a navigation link (but not dropdown toggles)
   links.forEach((link) => {
     link.addEventListener("click", (e) => {
-      // Don't close if it matches a dropdown toggle and we are on mobile
-      if (link.matches(".has-dropdown > a") && window.innerWidth <= 820) {
-        return;
+      // Don't close if it's a dropdown toggle on mobile
+      if (link.parentElement.classList.contains("has-dropdown") && window.innerWidth <= 820) {
+        return; // Let the dropdown toggle work
       }
-      closeMenu();
+      // No automatic close on link click; user must close manually
     });
+  });
+
+  // Prevent clicks inside nav from closing the menu
+  navList.addEventListener("click", (e) => {
+    e.stopPropagation();
   });
 
   // Close menu when clicking backdrop
   backdrop.addEventListener("click", closeMenu);
-
-  // Close menu when clicking outside (fallback)
-  document.addEventListener("click", (e) => {
-    if (
-      !navList.contains(e.target) &&
-      !toggleBtn.contains(e.target) &&
-      !backdrop.contains(e.target) &&
-      navList.classList.contains("active")
-    ) {
-      closeMenu();
-    }
-  });
 
   // Handle ESC key
   document.addEventListener("keydown", (e) => {
@@ -308,7 +302,6 @@ function updateYear() {
 window.initMobileNav = initMobileNav;
 window.initDropdownToggles = initDropdownToggles;
 window.updateYear = updateYear;
-
 
 const data = {
   announcements: [
