@@ -1779,9 +1779,9 @@ textarea {
     overflow-x: hidden;
   }
 
-  .hero-section {
+  /* .hero-section {
     overflow: hidden;
-  }
+  } */
 
   .hero-slider {
     overflow: hidden;
@@ -1808,4 +1808,3 @@ textarea {
   visibility: visible;
   pointer-events: auto;
 }
-
