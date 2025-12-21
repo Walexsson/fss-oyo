@@ -1666,7 +1666,7 @@ textarea {
 
   .hero-section {
     height: auto;
-    min-height: 100vh;
+    min-height: 60vh;
     padding-bottom: 3rem;
   }
 
@@ -1808,3 +1808,4 @@ textarea {
   visibility: visible;
   pointer-events: auto;
 }
+
