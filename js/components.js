@@ -269,7 +269,7 @@ class SiteFooter extends HTMLElement {
             Surveying, Oyo. All rights reserved.
           </p>
           <div class="bottom-links">
-            <span>Powered by <a href="#">DevBee</a></span>
+            <span>Powered by <a href="https://walexsson.github.io/DevBee">DevBee</a></span>
           </div>
         </div>
       </div>
@@ -283,3 +283,4 @@ class SiteFooter extends HTMLElement {
 
 customElements.define("site-header", SiteHeader);
 customElements.define("site-footer", SiteFooter);
+
