@@ -158,15 +158,16 @@ class SiteHeader extends HTMLElement {
                   >Admissions <i class="fa fa-chevron-down"></i
                 ></a>
                 <ul class="simple-dropdown">
-                  <li><a href="#">Admission Requirements</a></li>
+                  <li><a href="https://applications.fss-oyo.edu.ng/(S(rnvzik3gjvpfvi5q3m4vwzi3))/ProgrammeEntryRequirements.aspx" target="_blank">Admission Requirements</a></li>
                   <li><a href="https://applications.fss-oyo.edu.ng/" target="_blank">Admission Portal</a></li>
                 </ul>
               </li>
               <li class="has-dropdown">
                 <a href="#">Portal Login <i class="fa fa-chevron-down"></i></a>
                 <ul class="simple-dropdown">
-                  <li><a href="#">Students Portal</a></li>
-                  <li><a href="#">Staff Portal</a></li>
+                  <li><a href="https://portal.fss-oyo.edu.ng/" target="_blank">Students Portal <span class="italic">(Freshers)</span></a></li>
+                  <li><a href="https://studentportal.fss-oyo.edu.ng/login" target="_blank">Students Portal <span class="italic">(Returning)</span></a></li>
+                  <li><a href="https://portal.fss-oyo.edu.ng/" target="_blank">Staff Portal</a></li>
                 </ul>
               </li>
               <li><a href="${basePath}/index.html#news">News</a></li>
@@ -246,10 +247,12 @@ class SiteFooter extends HTMLElement {
             <h5>Downloads</h5>
             <ul>
               <li><a href="#"><i class="fa fa-file-pdf" download></i> Academic Calendar</a></li>
-              <li><a href="#"><i class="fa fa-file-pdf" download></i> Student Handbook</a></li>
+              <li><a href="#"><i class="fa fa-file-pdf" download></i> Students' Handbook</a></li>
               <li><a href="#"><i class="fa fa-file-pdf" download></i> School Fees Schedule</a></li>
               <li><a href="#"><i class="fa fa-file-pdf" download></i> Fees Structure</a></li>
               <li><a href="#"><i class="fa fa-file-pdf" download></i> First Semester Exam Schedule</a></li>
+              <li><a href="${basePath}/pdf/FSS conditions of service.pdf"><i class="fa fa-file-pdf" download></i>The School Conditions of Service (2013)</a></li>
+              <li><a href="${basePath}/pdf/Revised Schemes of Service for NBTE and Fed Polys july 2013.pdf"><i class="fa fa-file-pdf" download></i>NBTE Scheme of Service (July 2013)</a></li>
             </ul>
           </div>
 

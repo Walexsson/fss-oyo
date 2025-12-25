@@ -573,6 +573,9 @@ textarea {
   cursor: pointer;
   color: var(--clr-navy);
 }
+.italic {
+  font-style: italic;
+}
 
 /* =========================================
    5. HERO SECTION
@@ -1043,6 +1046,10 @@ textarea {
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
+}
+.cta-btns .btn-outline-white:hover {
+  border: solid 1px var(--clr-accent-dark) !important;
+  transform: translateY(-2px);
 }
 
 /* Contact */
