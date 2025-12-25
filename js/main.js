@@ -4,6 +4,7 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
+  initSmoothScrolling();
   initInternalNavigation();
   initMobileNav();
   initDropdownToggles();
@@ -225,7 +226,10 @@ function initMobileNav() {
   links.forEach((link) => {
     link.addEventListener("click", (e) => {
       // Don't close if it's a dropdown toggle on mobile
-      if (link.parentElement.classList.contains("has-dropdown") && window.innerWidth <= 820) {
+      if (
+        link.parentElement.classList.contains("has-dropdown") &&
+        window.innerWidth <= 820
+      ) {
         return; // Let the dropdown toggle work
       }
       // No automatic close on link click; user must close manually
@@ -274,17 +278,68 @@ function initInternalNavigation() {
       if (targetElement) {
         e.preventDefault();
         const headerOffset = 85;
-        const elementPosition = targetElement.getBoundingClientRect().top;
-        const offsetPosition =
-          elementPosition + window.pageYOffset - headerOffset;
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth",
-        });
+        // Use Lenis if available
+        if (window.lenis) {
+          window.lenis.scrollTo(targetElement, {
+            offset: -headerOffset,
+            duration: 1.5, // Slightly slower for dramatic effect if desired
+          });
+        } else {
+          // Fallback to native
+          const elementPosition = targetElement.getBoundingClientRect().top;
+          const offsetPosition =
+            elementPosition + window.pageYOffset - headerOffset;
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+        }
       }
     });
   });
+}
+
+function initSmoothScrolling() {
+  // Inject Lenis script dynamically
+  const script = document.createElement("script");
+  script.src = "https://unpkg.com/lenis@1.1.20/dist/lenis.min.js";
+  script.async = true;
+  script.onload = () => {
+    // Initialize Lenis
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // https://www.desmos.com/calculator/brs54l4xou
+      direction: "vertical",
+      gestureDirection: "vertical",
+      smooth: true,
+      mouseMultiplier: 1,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
+
+    window.lenis = lenis;
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    // Connect to GSAP ScrollTrigger if present (optional future proofing)
+    /* 
+    if (typeof ScrollTrigger !== 'undefined') {
+        lenis.on('scroll', ScrollTrigger.update)
+        gsap.ticker.add((time)=>{
+            lenis.raf(time * 1000)
+        })
+        gsap.ticker.lagSmoothing(0)
+    }
+    */
+  };
+  document.head.appendChild(script);
 }
 
 function updateYear() {
@@ -314,14 +369,14 @@ const data = {
     {
       title: "Surveying & Geoinformatics",
       dept: "surveying",
-      level: "ND / HND / PGD",
+      level: "ND / HND / PPD / PD",
       desc: "The foundational course covering geodesy, photogrammetry, and hydrography.",
     },
 
     {
       title: "Cartography & GIS",
       dept: "cartography",
-      level: "PD / ND / HND",
+      level: "ND / HND / PGD GIS",
       desc: "The art and science of map making combined with modern GIS technologies.",
     },
     {

@@ -179,8 +179,25 @@
   padding: 0;
 }
 
-html {
-  scroll-behavior: smooth;
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }
 
 body {
@@ -308,7 +325,7 @@ textarea {
 .btn-outline {
   border: 2px solid white;
   color: white;
-  background: transparent;
+  /* background: transparent; */
 }
 
 .btn-outline:hover {
@@ -627,6 +644,7 @@ textarea {
   z-index: 2;
   max-width: 800px;
   padding-top: 2rem;
+  text-align: center;
 }
 
 .slide-content h1 {
@@ -644,11 +662,14 @@ textarea {
   margin-bottom: 2rem;
   color: rgba(255, 255, 255, 0.9);
   max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero-actions {
   display: flex;
   gap: 1rem;
+  justify-content: center;
 }
 
 .slider-dots {
@@ -1711,8 +1732,9 @@ textarea {
   }
 
   .hero-actions .btn {
-    width: 100%;
+    max-width: 70%;
     justify-content: center;
+    margin: auto;
   }
 
   /* Stats Cards - Full width */
@@ -1779,9 +1801,9 @@ textarea {
     overflow-x: hidden;
   }
 
-  /* .hero-section {
+  .hero-section {
     overflow: hidden;
-  } */
+  }
 
   .hero-slider {
     overflow: hidden;
