@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadNews();
 });
 
+
 /* =========================================
    1. NAVIGATION & UI INTERACTIONS
    ========================================= */

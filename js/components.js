@@ -191,25 +191,25 @@ class SiteHeader extends HTMLElement {
   highlightActiveLink() {
     const currentPath = window.location.pathname;
     const links = this.querySelectorAll("a");
-    
-    links.forEach(link => {
-        // Simple check: if href ends with current path
-        const href = link.getAttribute('href');
-        if (href && href !== '#' && !href.startsWith('#')) {
-            // Normalize paths for comparison
-            if (currentPath.includes(href.replace('../', '').replace('./', ''))) {
-               // This is a naive check but works for typical structure
-               link.classList.add('active');
-            }
+
+    links.forEach((link) => {
+      // Simple check: if href ends with current path
+      const href = link.getAttribute("href");
+      if (href && href !== "#" && !href.startsWith("#")) {
+        // Normalize paths for comparison
+        if (currentPath.includes(href.replace("../", "").replace("./", ""))) {
+          // This is a naive check but works for typical structure
+          link.classList.add("active");
         }
+      }
     });
   }
 }
 
 class SiteFooter extends HTMLElement {
   connectedCallback() {
-      const basePath = this.getAttribute("base-path") || ".";
-      this.innerHTML = `
+    const basePath = this.getAttribute("base-path") || ".";
+    this.innerHTML = `
       <footer class="site-footer">
       <div class="container">
         <div class="footer-top grid grid-4">
@@ -278,9 +278,9 @@ class SiteFooter extends HTMLElement {
       </div>
     </footer>
       `;
-      
-      // Re-init year update
-      if (window.updateYear) window.updateYear();
+
+    // Re-init year update
+    if (window.updateYear) window.updateYear();
   }
 }
 
