@@ -274,7 +274,7 @@ class SiteFooter extends HTMLElement {
 
         <div class="footer-bottom footer-links">
           <p>
-            &copy; <span id="current-year">2024</span> Federal School of
+            &copy; <span id="current-year">2026</span> Federal School of
             Surveying, Oyo. All rights reserved.
           </p>
           <div class="bottom-links">
@@ -292,3 +292,4 @@ class SiteFooter extends HTMLElement {
 
 customElements.define("site-header", SiteHeader);
 customElements.define("site-footer", SiteFooter);
+
