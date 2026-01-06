@@ -433,6 +433,20 @@ const data = {
    3. DYNAMIC CONTENT LOADERS
    ========================================= */
 
+function loadAnnouncements() {
+  try {
+    const ticker = document.querySelector('.announcement-bar .ticker-content');
+    if (!ticker || !window.data || !Array.isArray(window.data.news)) return;
+    const items = data.news.map((n) => n.title || '').filter(Boolean);
+    if (items.length === 0) return;
+    // Join with separators similar to the original markup
+    ticker.textContent = items.join(' | ');
+  } catch (e) {
+    // fail silently to avoid blocking other inits
+  }
+}
+
+
 function loadProgrammes() {
   const grid = document.getElementById("programmes-grid");
   const filterBtns = document.querySelectorAll(".filter-btn");
