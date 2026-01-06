@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
   loadAnnouncements();
   loadProgrammes();
   loadNews();
+  initCalendar();
+  initFooterSearch();
 });
 
 
@@ -360,12 +362,6 @@ window.initDropdownToggles = initDropdownToggles;
 window.updateYear = updateYear;
 
 const data = {
-  announcements: [
-    "Admission into ND/HND Programmes for 2025/2026 Session is ongoing.",
-    "Resumption date for staff and students: January 5th, 2026.",
-    "FSS Oyo Convocation Ceremony scheduled between Monday, 8th December and Thursday, 11th December, 2025.",
-    "Add more announcements here",
-  ],
   programmes: [
     {
       title: "Surveying & Geoinformatics",
@@ -402,11 +398,11 @@ const data = {
   news: [
     {
       title:
-        "Rector Charges Students on Innovation and Discipline during Orientation",
-      date: "05",
-      month: "Dec",
+        "Student Matriculation Ceremony Scheduled for January 22, 2026",
+      date: "22",
+      month: "JAN",
       excerpt:
-        "The Rector, Surv. Dupe Nihinlola Olayinka-Dosunmu, PhD, fnis, fgeoson, mnes, has urged newly admitted students to embrace technology and discipline as they begin their academic journey at the institution.",
+        "The school will hold its matriculation ceremony for newly admitted students on January 22. The event formally admits fresh students into the institution and marks the beginning of their academic journey. All newly admitted students are expected to attend and participate fully in the exercise.",
     },
     {
       title: "FSS Oyo Partners with NASRDA for Space Research Training",
@@ -423,21 +419,19 @@ const data = {
         "SURCON accreditation team lauds the school's state-of-the-art laboratory facilities during their recent accreditation visit.",
     },
   ],
+
+  //UPDATE ADDED EVENT DATE HERE FOR THE CALENDAR  
+  events: [
+    { date: 5, month: 0, year: 2026 }, // Jan 5, 2026
+    { date: 11, month: 11, year: 2025 }, // Dec 11, 2025
+    { date: 22, month: 0, year: 2026 }, // Jan 22, 2026
+    { date: 1, month: 9, year: 2026 }, // Oct 1, 2026
+  ],
 };
 
 /* =========================================
    3. DYNAMIC CONTENT LOADERS
    ========================================= */
-
-function loadAnnouncements() {
-  const marquee = document.getElementById("announcement-marquee");
-  if (!marquee) return;
-
-  // Join with separator
-  marquee.innerHTML = data.announcements.join(
-    "&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;"
-  );
-}
 
 function loadProgrammes() {
   const grid = document.getElementById("programmes-grid");
@@ -525,3 +519,350 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+/* =========================================
+   4. CALENDAR FUNCTIONALITY
+   ========================================= */
+
+let currentViewYear;
+let currentViewMonth;
+
+function initCalendar() {
+  const monthEl = document.getElementById("calendar-month");
+  const daysEl = document.getElementById("calendar-days");
+  const prevBtn = document.getElementById("cal-prev");
+  const nextBtn = document.getElementById("cal-next");
+
+  if (!monthEl || !daysEl) return;
+
+  const now = new Date();
+  currentViewYear = now.getFullYear();
+  currentViewMonth = now.getMonth();
+
+  renderCalendar();
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      currentViewMonth--;
+      if (currentViewMonth < 0) {
+        currentViewMonth = 11;
+        currentViewYear--;
+      }
+      renderCalendar();
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      currentViewMonth++;
+      if (currentViewMonth > 11) {
+        currentViewMonth = 0;
+        currentViewYear++;
+      }
+      renderCalendar();
+    });
+  }
+}
+
+function renderCalendar() {
+  const monthEl = document.getElementById("calendar-month");
+  const daysEl = document.getElementById("calendar-days");
+
+  if (!monthEl || !daysEl) return;
+
+  const now = new Date();
+  const realYear = now.getFullYear();
+  const realMonth = now.getMonth();
+  const realDate = now.getDate();
+
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  monthEl.textContent = `${monthNames[currentViewMonth]} ${currentViewYear}`;
+
+  const firstDay = new Date(currentViewYear, currentViewMonth, 1).getDay();
+  const daysInMonth = new Date(
+    currentViewYear,
+    currentViewMonth + 1,
+    0
+  ).getDate();
+  const daysInPrevMonth = new Date(
+    currentViewYear,
+    currentViewMonth,
+    0
+  ).getDate();
+
+  let html = "";
+
+  // Previous month filler
+  for (let i = 0; i < firstDay; i++) {
+    const d = daysInPrevMonth - firstDay + 1 + i;
+    html += `<span class="dim">${d}</span>`;
+  }
+
+  // Current month
+  for (let i = 1; i <= daysInMonth; i++) {
+    let className = "";
+
+    // Check for Today
+    if (
+      i === realDate &&
+      currentViewMonth === realMonth &&
+      currentViewYear === realYear
+    ) {
+      className += " active";
+    }
+
+    // Check for Events
+    const hasEvent = data.events.some(
+      (e) =>
+        e.date === i &&
+        e.month === currentViewMonth &&
+        e.year === currentViewYear
+    );
+
+    if (hasEvent) {
+      className += " has-event";
+    }
+
+    html += `<span class="${className.trim()}">${i}</span>`;
+  }
+
+  // Next month filler
+  const totalCells = firstDay + daysInMonth;
+  const remaining = 7 - (totalCells % 7);
+  if (remaining < 7) {
+    for (let i = 1; i <= remaining; i++) {
+      html += `<span class="dim">${i}</span>`;
+    }
+  }
+
+  // Headers + generated days
+  const headers = `<span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>`;
+  daysEl.innerHTML = headers + html;
+}
+
+// Append CSS for active date and event indicators
+const calendarStyle = document.createElement("style");
+calendarStyle.textContent = `
+    .calendar-days span.active {
+        background-color: var(--primary-color, #0056b3);
+        color: #fff;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        margin: auto;
+    }
+    .calendar-days span {
+        position: relative; /* For Pseudo-element positioning */
+    }
+    .calendar-days span.has-event {
+        background-color: #f97316; /* Orange background */
+        color: #fff; /* White text */
+        font-weight: bold;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        margin: auto;
+    }
+    
+    /* Active day styling (overrides has-event background if both apply, or we combine) */
+    .calendar-days span.active {
+        background-color: var(--primary-color, #0056b3) !important;
+        color: #fff !important;
+    }
+
+    /* Distinct look for Active + Event: Blue bg with Orange Border */
+    .calendar-days span.active.has-event {
+        border: 2px solid #f97316; 
+    }
+`;
+document.head.appendChild(calendarStyle);
+
+/* =========================================
+   5. FOOTER SEARCH
+   Client-side search over a small set of site pages.
+   ========================================= */
+
+function initFooterSearch() {
+  const input = document.getElementById("footer-search-input");
+  const btn = document.getElementById("footer-search-btn");
+  const resultsEl = document.getElementById("footer-search-results");
+  if (!input || !resultsEl) return;
+
+  const pages = [
+    "index.html",
+    "pages/about/about-us.html",
+    "pages/about/vision-mission.html",
+    "pages/about/anthem.html",
+    "pages/about/governing-council.html",
+    "pages/about/academic-board.html",
+    "pages/about/principal-officers.html",
+    // PDFs and downloadable documents (indexed by filename and linked)
+    "pdf/FSS conditions of service.pdf",
+    "pdf/Revised Schemes of Service for NBTE and Fed Polys july 2013.pdf",
+  ];
+
+  let index = null;
+
+  function debounce(fn, wait = 250) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), wait);
+    };
+  }
+
+  async function buildIndex() {
+    if (index) return index;
+    const idx = [];
+
+    // Index the currently loaded document so searches work when running via file:// or when fetch is blocked
+    try {
+      const currentPath = (window.location.pathname || "index.html").split("/").pop() || "index.html";
+      const docBody = document.body ? document.body.textContent : "";
+      idx.push({ path: currentPath, title: (document.title || currentPath).trim(), body: (docBody || "").replace(/\s+/g, " ") });
+    } catch (e) {
+      // ignore
+    }
+
+    // Index visible links and their surrounding text to improve match chances for navigation labels
+    try {
+      document.querySelectorAll("a[href]").forEach((a) => {
+        try {
+          const href = a.getAttribute("href");
+          if (!href) return;
+          // skip external, mailto, tel
+          if (/^(https?:)?\/\//i.test(href) || href.startsWith("mailto:") || href.startsWith("tel:")) return;
+          const path = href.split("#")[0] || (window.location.pathname || "index.html");
+          const text = (a.textContent || "").trim();
+          if (text) {
+            // include a bit of surrounding context if available
+            const surrounding = a.closest && a.closest("li") ? (a.closest("li").textContent || "") : text;
+            idx.push({ path: path, title: text, body: (surrounding || text).replace(/\s+/g, " ") });
+          }
+        } catch (e) {}
+      });
+    } catch (e) {}
+    await Promise.all(
+      pages.map(async (p) => {
+        try {
+          // If it's a PDF or other non-HTML document, avoid fetching and index by filename
+          if (p.toLowerCase().endsWith(".pdf") || p.toLowerCase().endsWith(".doc") || p.toLowerCase().endsWith(".docx")) {
+            const name = p.split("/").pop();
+            // avoid duplicates
+            if (!idx.some((it) => it.path === p && it.title === name)) idx.push({ path: p, title: name, body: "" });
+            return;
+          }
+
+          const res = await fetch(p);
+          if (!res.ok) throw new Error("fetch failed");
+          const txt = await res.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(txt, "text/html");
+          const title = doc.querySelector("title")?.textContent || p;
+          const body = doc.body?.textContent || "";
+          // avoid duplicates
+          const cleanTitle = title.trim();
+          const cleanBody = body.replace(/\s+/g, " ");
+          if (!idx.some((it) => it.path === p && it.title === cleanTitle)) idx.push({ path: p, title: cleanTitle, body: cleanBody });
+        } catch (e) {
+          // If fetch fails (file:// or CORS), fallback to title-only entry
+          const name = p.split("/").pop();
+          if (!idx.some((it) => it.path === p && it.title === name)) idx.push({ path: p, title: name, body: "" });
+        }
+      })
+    );
+    index = idx;
+    return index;
+  }
+
+  function scoreMatch(item, q) {
+    const qlc = q.toLowerCase();
+    let score = 0;
+    if (item.title.toLowerCase().includes(qlc)) score += 30;
+    if (item.body.toLowerCase().includes(qlc)) score += 10;
+    return score;
+  }
+
+  function renderResults(results, q) {
+    if (!results || results.length === 0) {
+      resultsEl.innerHTML = `<div class="no-results">No results for "${escapeHtml(q)}"</div>`;
+      return;
+    }
+    resultsEl.innerHTML = results
+      .map((r) => {
+        const excerpt = makeExcerpt(r, q);
+        return `<a class="search-result" href="${r.path}"><div class="sr-title">${escapeHtml(r.title)}</div><div class="sr-excerpt">${escapeHtml(excerpt)}</div></a>`;
+      })
+      .join("");
+  }
+
+  function makeExcerpt(item, q) {
+    const qlc = q.toLowerCase();
+    const body = item.body || "";
+    const idx = body.toLowerCase().indexOf(qlc);
+    if (idx === -1) return body.slice(0, 140).trim();
+    const start = Math.max(0, idx - 40);
+    return body.slice(start, Math.min(body.length, idx + 100)).trim();
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  async function doSearch(q) {
+    q = q.trim();
+    if (!q) {
+      resultsEl.innerHTML = "";
+      return;
+    }
+    await buildIndex();
+    const matches = index
+      .map((it) => ({ ...it, score: scoreMatch(it, q) }))
+      .filter((it) => it.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 12);
+    renderResults(matches, q);
+  }
+
+  const debounced = debounce(() => doSearch(input.value), 250);
+
+  input.addEventListener("input", debounced);
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      doSearch(input.value);
+    }
+  });
+
+  if (btn) {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      doSearch(input.value);
+    });
+  }
+}

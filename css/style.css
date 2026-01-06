@@ -2,7 +2,7 @@
    1. VARIABLES & DESIGN SYSTEM
    ========================================= */
 :root {
-  /* Colors */
+  /* Colors - Light Theme (Default) */
   --clr-navy: #0f172a;
   --clr-navy-light: #1e293b;
   --clr-accent: #0ea5e9;
@@ -41,9 +41,6 @@
   --transition: all 0.3s ease-in-out;
 }
 
-/* Theme Toggle Button */
-
-/* Animations */
 /* Animations */
 @keyframes fadeInUp {
   from {
@@ -729,6 +726,7 @@ textarea {
 .stat-card {
   width: 210px;
   background: white;
+  backdrop-filter: blur(10px);
   padding: 1rem;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
@@ -1202,6 +1200,87 @@ textarea {
   width: 40px;
   cursor: pointer;
   flex-shrink: 0;
+}
+
+/* Footer Search */
+.footer-search-wrap {
+  padding: 1.25rem 0 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.footer-search {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  max-width: 900px;
+  margin: 0 auto 0.75rem;
+}
+.footer-search input[type="search"] {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: white;
+}
+.footer-search input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+.footer-search button {
+  background: var(--clr-accent);
+  border: none;
+  color: white;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.footer-search-results {
+  max-width: 900px;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.95rem;
+}
+.footer-newsletter .footer-search-inline {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.footer-newsletter .footer-search-inline input[type="search"] {
+  flex: 1;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: white;
+}
+.footer-newsletter .footer-search-inline button {
+  background: var(--clr-accent);
+  border: none;
+  color: white;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.footer-search-results .no-results {
+  padding: 0.5rem 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+.footer-search-results .search-result {
+  display: block;
+  padding: 0.6rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  color: inherit;
+}
+.footer-search-results .search-result:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+.footer-search-results .sr-title {
+  font-weight: 700;
+  color: white;
+}
+.footer-search-results .sr-excerpt {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
 }
 
 .footer-bottom {

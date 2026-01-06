@@ -174,6 +174,8 @@ class SiteHeader extends HTMLElement {
               <li>
                 <a href="${basePath}/index.html#contact" class="btn btn-sm btn-primary">Contact Us</a>
               </li>
+
+              </li>
             </ul>
           </nav>
         </div>
@@ -187,6 +189,8 @@ class SiteHeader extends HTMLElement {
 
     this.highlightActiveLink();
   }
+
+
 
   highlightActiveLink() {
     const currentPath = window.location.pathname;
@@ -257,14 +261,16 @@ class SiteFooter extends HTMLElement {
           </div>
 
           <div class="footer-newsletter reveal stagger-delay">
-            <h5>Newsletter</h5>
-            <p>Subscribe to get the latest school news.</p>
-            <form class="newsletter-form">
-              <input type="email" placeholder="Enter email" />
-              <button type="submit"><i class="fa fa-paper-plane"></i></button>
-            </form>
+            <h5>Search the site</h5>
+            <p>Quickly find pages and documents across the site.</p>
+            <div class="footer-search-inline">
+              <input id="footer-search-input" type="search" placeholder="Search the site, e.g. 'admissions' or 'NBTE'" aria-label="Search the site" />
+              <button id="footer-search-btn" aria-label="Search"><i class="fa fa-search"></i></button>
+            </div>
+            <div id="footer-search-results" class="footer-search-results" aria-live="polite"></div>
           </div>
         </div>
+ 
 
         <div class="footer-bottom footer-links">
           <p>
